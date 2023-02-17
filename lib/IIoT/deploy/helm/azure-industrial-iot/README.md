@@ -5,50 +5,50 @@ enabled servers in a factory network, register them in Azure IoT Hub and start c
 
 ## Table Of Contents <!-- omit in toc -->
 
-* [Introduction](#introduction)
-* [Prerequisites](#prerequisites)
-  * [Required Azure Resources](#required-azure-resources)
-    * [Azure AAD Tenant](#azure-aad-tenant)
-    * [Azure IoT Hub](#azure-iot-hub)
-    * [Azure Cosmos DB Account](#azure-cosmos-db-account)
-    * [Azure Storage Account](#azure-storage-account)
-      * [Data Protection Container (Optional)](#data-protection-container-optional)
-    * [Azure Event Hub Namespace](#azure-event-hub-namespace)
-      * [Azure Event Hub](#azure-event-hub)
-      * [Azure Event Hub Consumer Groups](#azure-event-hub-consumer-groups)
-    * [Azure Service Bus Namespace](#azure-service-bus-namespace)
-    * [Azure Key Vault](#azure-key-vault)
-      * [Data Protection Key (Optional)](#data-protection-key-optional)
-  * [Recommended Azure Resources](#recommended-azure-resources)
-    * [Azure AAD App Registration](#azure-aad-app-registration)
-  * [Optional Azure Resources](#optional-azure-resources)
-    * [Azure SignalR](#azure-signalr)
-    * [Azure Application Insights](#azure-application-insights)
-    * [Azure Log Analytics Workspace](#azure-log-analytics-workspace)
-* [Installing the Chart](#installing-the-chart)
-* [Configuration](#configuration)
-  * [Image](#image)
-  * [Azure Resources](#azure-resources)
-  * [Load Configuration From Azure Key Vault](#load-configuration-from-azure-key-vault)
-  * [External Service URL](#external-service-url)
-  * [RBAC](#rbac)
-  * [Service Account](#service-account)
-  * [Application Runtime Configuration](#application-runtime-configuration)
-  * [Deployed Components](#deployed-components)
-    * [Deployment Resource Configuration](#deployment-resource-configuration)
-    * [Service Resource Configuration](#service-resource-configuration)
-    * [Ingress Resource Configuration](#ingress-resource-configuration)
-  * [Prometheus](#prometheus)
-  * [Minimal Configuration](#minimal-configuration)
-* [Special Notes](#special-notes)
-  * [Resource Requests And Limits](#resource-requests-and-limits)
-  * [Data Protection](#data-protection)
-    * [Azure Storage Account Container](#azure-storage-account-container)
-    * [Azure Key Vault Key](#azure-key-vault-key)
-  * [Swagger](#swagger)
-  * [NGINX Ingress Controller](#nginx-ingress-controller)
-    * [Controller configuration](#controller-configuration)
-    * [Ingress Annotations](#ingress-annotations)
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+  - [Required Azure Resources](#required-azure-resources)
+    - [Azure AAD Tenant](#azure-aad-tenant)
+    - [Azure IoT Hub](#azure-iot-hub)
+    - [Azure Cosmos DB Account](#azure-cosmos-db-account)
+    - [Azure Storage Account](#azure-storage-account)
+      - [Data Protection Container (Optional)](#data-protection-container-optional)
+    - [Azure Event Hub Namespace](#azure-event-hub-namespace)
+      - [Azure Event Hub](#azure-event-hub)
+      - [Azure Event Hub Consumer Groups](#azure-event-hub-consumer-groups)
+    - [Azure Service Bus Namespace](#azure-service-bus-namespace)
+    - [Azure Key Vault](#azure-key-vault)
+      - [Data Protection Key (Optional)](#data-protection-key-optional)
+  - [Recommended Azure Resources](#recommended-azure-resources)
+    - [Azure AAD App Registration](#azure-aad-app-registration)
+  - [Optional Azure Resources](#optional-azure-resources)
+    - [Azure SignalR](#azure-signalr)
+    - [Azure Application Insights](#azure-application-insights)
+    - [Azure Log Analytics Workspace](#azure-log-analytics-workspace)
+- [Installing the Chart](#installing-the-chart)
+- [Configuration](#configuration)
+  - [Image](#image)
+  - [Azure Resources](#azure-resources)
+  - [Load Configuration From Azure Key Vault](#load-configuration-from-azure-key-vault)
+  - [External Service URL](#external-service-url)
+  - [RBAC](#rbac)
+  - [Service Account](#service-account)
+  - [Application Runtime Configuration](#application-runtime-configuration)
+  - [Deployed Components](#deployed-components)
+    - [Deployment Resource Configuration](#deployment-resource-configuration)
+    - [Service Resource Configuration](#service-resource-configuration)
+    - [Ingress Resource Configuration](#ingress-resource-configuration)
+  - [Prometheus](#prometheus)
+  - [Minimal Configuration](#minimal-configuration)
+- [Special Notes](#special-notes)
+  - [Resource Requests And Limits](#resource-requests-and-limits)
+  - [Data Protection](#data-protection)
+    - [Azure Storage Account Container](#azure-storage-account-container)
+    - [Azure Key Vault Key](#azure-key-vault-key)
+  - [Swagger](#swagger)
+  - [NGINX Ingress Controller](#nginx-ingress-controller)
+    - [Controller configuration](#controller-configuration)
+    - [Ingress Annotations](#ingress-annotations)
 
 ## Introduction
 
@@ -688,19 +688,18 @@ parameters.
 Here is the list of all Azure Industrial IoT components that are deployed by this chart. Currently only
 `engineeringTool` is disabled by default.
 
-| Name in `values.yaml`   | Description                                                                 | Enabled by Default |
-|-------------------------|-----------------------------------------------------------------------------|--------------------|
-| `registry`              | [Registry Microservice](../../../docs/services/registry.md)                 | `true`             |
-| `sync`                  | [Registry Synchronization Agent](../../../docs/services/registry-sync.md)   | `true`             |
-| `twin`                  | [OPC Twin Microservice](../../../docs/services/twin.md)                     | `true`             |
-| `history`               | [OPC Historian Access Microservice](../../../docs/services/twin-history.md) | `true`             |
-| `publisher`             | [OPC Publisher Service](../../../docs/services/publisher.md)                | `true`             |
-| `events`                | [Events Service](../../../docs/services/events.md)                          | `true`             |
-| `edgeJobs`              | [Publisher jobs orchestrator service](../../../docs/services/publisher.md)  | `true`             |
-| `onboarding`            | [Onboarding Processor](../../../docs/services/processor-onboarding.md)      | `true`             |
-| `eventsProcessor`       | [Edge Event Processor](../../../docs/services/processor-events.md)          | `true`             |
-| `telemetryProcessor`    | [Edge Telemetry processor](../../../docs/services/processor-telemetry.md)   | `true`             |
-| `engineeringTool`       | [Engineering Tool](../../../docs/services/engineeringtool.md)               | `false`            |
+| Name in `values.yaml` | Description                                                              | Default Image                                           |
+|-----------------------|--------------------------------------------------------------------------|---------------------------------------------------------|
+| `registry`            | [Registry Microservice](../../../docs/services/registry.md)              | `mcr.microsoft.com/iot/opc-registry-service:2.5.2`      |
+| `twin`                | [OPC Twin Microservice](../../../docs/services/twin.md)                  | `mcr.microsoft.com/iot/opc-twin-service:2.5.2`          |
+| `history`             | [OPC Historian Access Microservice](../../../docs/services/history.md)   | `mcr.microsoft.com/iot/opc-history-service:2.5.2`       |
+| `gateway`             | [OPC Gateway Microservice](../../../docs/services/gateway.md)            | `mcr.microsoft.com/iot/opc-gateway-service:2.5.2`       |
+| `vault`               | [OPC Vault Microservice](../../../docs/services/vault.md)                | `mcr.microsoft.com/iot/opc-vault-service:2.5.2`         |
+| `alerting`            | [Registry Security Alerting Agent](../../../docs/services/security.md)   | `mcr.microsoft.com/iot/opc-alerting-service:2.5.2`      |
+| `onboarding`          | [Registry Onboarding Microservice](../../../docs/services/onboarding.md) | `mcr.microsoft.com/iot/opc-onboarding-service:2.5.2`    |
+| `jobs`                | [Jobs Microservice](../../../docs/services/jobs.md)                      | `mcr.microsoft.com/iot/opc-jobs-service:2.5.2`          |
+| `modelProcessor`      | [Model Importer Agent](../../../docs/services/graph.md)                  | `mcr.microsoft.com/iot/opc-processor-service:2.5.2`     |
+| `blobNotification`    | Blob Notification Service                                                | `mcr.microsoft.com/iot/blob-notification-service:2.5.2` |
 
 #### Deployment Resource Configuration
 
